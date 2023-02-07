@@ -145,6 +145,7 @@ Figure 4: Block diagram of TinyML software algorithm.
 
 ### 7.0 Suggestion or Future Improvements
 - Modifying the library code to improve the stability of MAX30102 heart rate and SPO2 sensor data.
+- Preparing more dataset and retrain the AI model for better accuracy and stability.
 - Replacing ThingSpeak to Firebase cloud database as it has triggering method to send notification to mobile application.
 - Design mobile application to monitor the sensor data and to receive notification if emergency button is pressed.
 
