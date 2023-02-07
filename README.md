@@ -3,6 +3,9 @@
 **Group Name:** Smart Dolphins\
 **Owners:** Veknes Benjaman; Saw Jun Chao
 
+**Source Code:** [main.c](/ProjectLife/Core/Src/main.c)\
+**Video Demonstration:** [https://youtu.be/Id96uEEoQjs](https://youtu.be/Id96uEEoQjs)
+
 ### 1.0 Introduction
 Monitoring elderly people at home is an important way to ensure their well-being and safety, and to support their independence and quality of life.
 There are several reasons why it is important to monitor elderly people at home:
@@ -51,43 +54,99 @@ Figure 1: Block diagram of hardware connection.
 <center><br>Table 1: Function and connection type of components used.</center><br />
 <center>
 
-| Component  | Connection Type | Function |
-| :-------: | :------: | :------: |
-| 3-Axis Accelerometer | I2C | Provides acceleration data (the rate of change of velocity) for 3 axis |
-| Oximeter and Heart Rate Sensor | I2C | Provides blood oxygen level and heart rate data |
-| Push Button | INT | User input for emergency purpose | 
-| ESP8266 | USART | Allows internet connectivity and sends data to cloud database (Firebase) |
+| Component  | Connection Type | Pin Number | Function |
+| :-------: | :------: | :------: | :------: |
+| 3-Axis Accelerometer (MPU6050) | I2C | PB8 (SCL) PB9 (SDA)| Provides acceleration 3 axes data (the rate of change of velocity) for 3 axis |
+| Oximeter and Heart Rate Sensor (MAX30102) | I2C | PB10 (SCL) PB11 (SDA) | Provides blood oxygen level and heart rate data |
+| Push Button | INT | PC13 | User input for emergency purpose | 
+| ESP8266 | USART | PD5 (TX) PD6 (RX) | Allows internet connectivity and sends data to cloud database (ThingSpeak) |
+| USB to TTL | USART | PA9 (TX) PA10 (RX) | UART communication support for debug purpose |
 
 </center>
 
 
 ### 5.0 Algorithm (Software)
 
+**5.1 Flowchart of Algorithm**
+
+The flowchart of the algorithm is shown in Figure 2.
+
+<center><img src="/pictures/4_Software_Flowchart.png"></center>
+
+Figure 2: Flowchart of algorithm.
+
 **5.1 Implementing low power or sleep mode**
-- Configure the RTC to wake up the STM32 periodically from low power modes to read sensors and upload collected data to Firebase Realtime Database.
-- Configure push button interrupt to wake up STM32 to trigger Firebase Realtime Database to send emergency push notification to mobile application.
+- Configure the RTC to wake up the STM32 periodically for every 15 seconds from low power mode (STOP mode) to read sensors and upload collected data to ThingSpeak.
+- Configure push button interrupt to wake up STM32 to read sensors and upload collected data to ThingSpeak.
+- Calculation for producing Wakeup Counter of 15 seconds
+RTC_WAKEUPCLOCK_RTCCLK_DIV = RTCCLK_Div16 = 16\
+Wakeup Time Base = (RTC_WAKEUPCLOCK_RTCCLK_DIV /(LSI))\
+                 = (16 /(32KHz)) = 0.5ms\
+WakeUpCounter = Wakeup Time / Wakeup Time Base\
+              = 15s / 0.5ms = 30000 = 0x7530
 
 <center><img src="/pictures/2_Software_SleepMode_Block_Diagram.png"></center>
 
-Figure 2: Block diagram of sleep and wake up mode software algorithm.
+Figure 3: Block diagram of sleep and wake up mode software algorithm.
 
 **5.2 TinyML model preparation for inferencing**
-- Accelerometer data will be used to determine if the person are stationary, walking or running.
-- Oximeter and heart beat rate data will be used to determine if it is in stable level or not.
-- Preparing dataset for two senarios above to train model with Google Colab or utilizing pre-trained model (if available).
+- 26 data group of accelerometer (3 axes data) will be used to determine if the person are stationary, walking or running.
+- Preparing [dataset.zip](/ai_model/dataset.zip) for the senario above and train model with Google Colab to produce [model.h](/ai_model/model.h5) file.
 - Utilizing X-CUBE-AI expansion package (part of STM32Cube.AI ecosystem). It extends STM32CubeMX capabilities with automatic conversion and optimization of pretrained artificial intelligence algorithms, including neural network and classical machine learning models.
 - X-CUBE-AI supports models trained with TensorFlow, Keras, PyTorch, Caffe and others. The model file needs to be in Keras (.h5), TensorFlow Lite (.tflite), or ONNX (.onnx) format.
 
 <center><img src="/pictures/3_Software_TinyML_Block_Diagram.png"></center>
 
-Figure 3: Block diagram of TinyML software algorithm.
+Figure 4: Block diagram of TinyML software algorithm.
 
-**5.3 Google Firebase Realtime Database**
-- Cloud database to store sensor data and send push notification to mobile application.
+**5.3 ThingSpeak**
+- Cloud platform to store and monitor all the collected data (heart rate and oximeter sensor, output of AI model and emergency button state).
 
-**5.4 Android Application**
-- Developing a simple android application for monitoring data from Firebase Realtime Database and to receive push notification.
-- Drag and drop based mobile application development such as MIT App Inventor or others.
+### 6.0 Results
+
+**6.1 Output of AI model**
+
+- Class 0 (Stationary)
+<center><img src="/pictures/results/1_class0_stationary.png"></center>
+
+- Class 1 (Walking)
+<center><img src="/pictures/results/2_class1_walking.png"></center>
+
+- Class 2 (Running)
+<center><img src="/pictures/results/3_class2_running.png"></center>
+
+- ThingSpeak Movement Monitoring Data
+<center><img src="/pictures/results/4_thingspeak_ai_model.png"></center>
+
+**6.2 Output of Emergency Button**
+- Putty Output when emergency button is not pressed (1 or True)
+<center><img src="/pictures/results/9_emergencybutton_notpressed.png"></center>
+
+- Putty Output when emergency button is pressed (0 or False)
+<center><img src="/pictures/results/8_emergencybutton_pressed.png"></center>
+
+- ThingSpeak Emergency Button Data
+<center><img src="/pictures/results/7_thingspeak_emergencybutton_data.png"></center>
+
+**6.3 Output of Heart Rate (BPM)**
+- Putty Output of Heart Rate Data
+<center><img src="/pictures/results/10_hr_data.png"></center>
+
+- ThingSpeak Heart Rate Monitoring Data
+<center><img src="/pictures/results/11_thingspeak_hr_data.png"></center>
+
+**6.4 Output of Oxygen Saturation (SP02)**
+- Putty Output
+<center><img src="/pictures/results/12_spo2_data.png"></center>
+
+- ThingSpeak SP02 Monitoring Data
+<center><img src="/pictures/results/13_thingspeak_spo2_data.png"></center>
+
+
+### 7.0 Suggestion or Future Improvements
+- Modifying the library code to improve the stability of MAX30102 heart rate and SPO2 sensor data.
+- Replacing ThingSpeak to Firebase cloud database as it has triggering method to send notification to mobile application.
+- Design mobile application to monitor the sensor data and to receive notification if emergency button is pressed.
 
 ## Appendix A: Bill of Materials (BOM)
 

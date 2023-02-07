@@ -1,0 +1,30 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+# Toolchain: GNU Tools for STM32 (10.3-2021.10)
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../Core/Src/EspDataLogger/espdatalogger.c \
+../Core/Src/EspDataLogger/uartringbuffer.c 
+
+OBJS += \
+./Core/Src/EspDataLogger/espdatalogger.o \
+./Core/Src/EspDataLogger/uartringbuffer.o 
+
+C_DEPS += \
+./Core/Src/EspDataLogger/espdatalogger.d \
+./Core/Src/EspDataLogger/uartringbuffer.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+Core/Src/EspDataLogger/%.o Core/Src/EspDataLogger/%.su: ../Core/Src/EspDataLogger/%.c Core/Src/EspDataLogger/subdir.mk
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I"D:/UTM/Sem1/MKEL1123-05 ADVANCED MICROPROCESSOR SYSTEM/STM32/ProjectLife/Core/Src" -I"D:/UTM/Sem1/MKEL1123-05 ADVANCED MICROPROCESSOR SYSTEM/STM32/ProjectLife/Core/Inc" -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/ST/AI/Inc -I../X-CUBE-AI/App -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
+
+clean: clean-Core-2f-Src-2f-EspDataLogger
+
+clean-Core-2f-Src-2f-EspDataLogger:
+	-$(RM) ./Core/Src/EspDataLogger/espdatalogger.d ./Core/Src/EspDataLogger/espdatalogger.o ./Core/Src/EspDataLogger/espdatalogger.su ./Core/Src/EspDataLogger/uartringbuffer.d ./Core/Src/EspDataLogger/uartringbuffer.o ./Core/Src/EspDataLogger/uartringbuffer.su
+
+.PHONY: clean-Core-2f-Src-2f-EspDataLogger
+

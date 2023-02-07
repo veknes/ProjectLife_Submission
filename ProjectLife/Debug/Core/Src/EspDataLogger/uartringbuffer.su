@@ -1,0 +1,14 @@
+../Core/Src/EspDataLogger/uartringbuffer.c:42:6:Ringbuf_init	4	static
+../Core/Src/EspDataLogger/uartringbuffer.c:54:6:store_char	24	static
+../Core/Src/EspDataLogger/uartringbuffer.c:68:6:Uart_flush	4	static
+../Core/Src/EspDataLogger/uartringbuffer.c:74:5:Look_for	32	static
+../Core/Src/EspDataLogger/uartringbuffer.c:101:5:Uart_read	16	static
+../Core/Src/EspDataLogger/uartringbuffer.c:119:6:Uart_write	24	static
+../Core/Src/EspDataLogger/uartringbuffer.c:137:5:IsDataAvailable	4	static
+../Core/Src/EspDataLogger/uartringbuffer.c:142:6:Uart_sendstring	16	static
+../Core/Src/EspDataLogger/uartringbuffer.c:147:6:Uart_printbase	64	static
+../Core/Src/EspDataLogger/uartringbuffer.c:167:5:Uart_peek	4	static
+../Core/Src/EspDataLogger/uartringbuffer.c:180:5:Copy_upto	32	static
+../Core/Src/EspDataLogger/uartringbuffer.c:214:5:Get_after	32	static
+../Core/Src/EspDataLogger/uartringbuffer.c:227:5:Wait_for	24	static
+../Core/Src/EspDataLogger/uartringbuffer.c:261:6:Uart_isr	32	static
