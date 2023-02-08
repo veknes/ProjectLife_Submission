@@ -106,19 +106,6 @@ Figure 5: Block diagram of TinyML software algorithm.
 **5.3 ThingSpeak**
 - Cloud platform to store and monitor all the collected data (heart rate and oximeter sensor, output of AI model and emergency button state).
 
-**5.4 Power consumption during normal and low power (STOP) mode**
-- Power consumption when in normal mode = (3.3V)(112.8mA) = 372.24mW
-- Power consumption when in low power (STOP) mode = (3.3V)(56.6mA) = 186.78mW
-- Power consumption is reduced almost 50% in low power (STOP) mode
-
-<center><img src="/pictures/7_PowerConsumption_NormalMode.jpg"></center>
-
-Figure 6: Current flow when in normal mode.
-
-<center><img src="/pictures/6_PowerConsumption_STOPMode.jpg"></center>
-
-Figure 7: Current flow when in low power (STOP) mode.
-
 ### 6.0 Results
 
 **6.1 Output of AI model**
@@ -158,6 +145,19 @@ Figure 7: Current flow when in low power (STOP) mode.
 
 - ThingSpeak SP02 Monitoring Data
 <center><img src="/pictures/results/13_thingspeak_spo2_data.png"></center>
+
+**6.5 Power consumption during normal and low power (STOP) mode**
+- Power consumption when in normal mode = (3.3V)(112.8mA) = 372.24mW
+- Power consumption when in low power (STOP) mode = (3.3V)(56.6mA) = 186.78mW
+- Power consumption is reduced almost 50% in low power (STOP) mode
+
+<center><img src="/pictures/7_PowerConsumption_NormalMode.jpg"></center>
+
+Figure 6: Current flow when in normal mode.
+
+<center><img src="/pictures/6_PowerConsumption_STOPMode.jpg"></center>
+
+Figure 7: Current flow when in low power (STOP) mode.
 
 
 ### 7.0 Suggestion or Future Improvements
