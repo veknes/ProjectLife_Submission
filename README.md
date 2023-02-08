@@ -79,7 +79,7 @@ The flowchart of the algorithm is shown in Figure 3.
 
 Figure 3: Flowchart of algorithm.
 
-**5.1 Implementing low power or sleep mode**
+**5.1 Implementing low power mode and RTC wakeup trigger**
 - Configured the RTC to wake up the STM32 periodically for every 15 seconds from low power mode (STOP mode) to read sensors and upload collected data to ThingSpeak.
 - Configured push button interrupt to wake up STM32 to read sensors and upload collected data to ThingSpeak.
 - Calculation for producing Wakeup Counter of 15 seconds
