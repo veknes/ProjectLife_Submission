@@ -45,7 +45,7 @@ This study described the design of a bracelet, equipped with an STM32F103VET6 mi
 This study described the development of a device, which utilizes an STM32 single chip microcomputer system with a modular design, includes a SIM800 C mobile communication module and a GPS positioning module to provide location and state information in the event of an unexpected fall. It also integrates sensors such as body temperature, heart rate, and step number to monitor the elderly person's health in real time, and sends an alarm if any data are abnormal. Additionally, the device includes a cloud monitoring app based on the E4A platform to allow for real-time monitoring of the elderly person's physical state.
  
 ### 4.0 System Architecture (Hardware)
-The block diagram of the hardware connection is shown in Figure 1. The function and connection type of each components are described in Table 1.
+The block diagram of the hardware connection is shown in Figure 1. The function and connection type of each components are described in Table 1. The circuit connection on STM32F103VET6 development board and breadboard is shown in Figure 2.
 
 <center><img src="/pictures/1_Hardware_Block_Diagram.png"></center>
 
@@ -64,20 +64,24 @@ Figure 1: Block diagram of hardware connection.
 
 </center>
 
+<center><img src="/pictures/5_Circuit_Connection.jpg"></center>
+
+Figure 2: Circuit connection.
+
 
 ### 5.0 Algorithm (Software)
 
 **5.1 Flowchart of Algorithm**
 
-The flowchart of the algorithm is shown in Figure 2.
+The flowchart of the algorithm is shown in Figure 3.
 
 <center><img src="/pictures/4_Software_Flowchart.png"></center>
 
-Figure 2: Flowchart of algorithm.
+Figure 3: Flowchart of algorithm.
 
 **5.1 Implementing low power or sleep mode**
-- Configure the RTC to wake up the STM32 periodically for every 15 seconds from low power mode (STOP mode) to read sensors and upload collected data to ThingSpeak.
-- Configure push button interrupt to wake up STM32 to read sensors and upload collected data to ThingSpeak.
+- Configured the RTC to wake up the STM32 periodically for every 15 seconds from low power mode (STOP mode) to read sensors and upload collected data to ThingSpeak.
+- Configured push button interrupt to wake up STM32 to read sensors and upload collected data to ThingSpeak.
 - Calculation for producing Wakeup Counter of 15 seconds
 RTC_WAKEUPCLOCK_RTCCLK_DIV = RTCCLK_Div16 = 16\
 Wakeup Time Base = (RTC_WAKEUPCLOCK_RTCCLK_DIV /(LSI))\
@@ -87,20 +91,33 @@ WakeUpCounter = Wakeup Time / Wakeup Time Base\
 
 <center><img src="/pictures/2_Software_SleepMode_Block_Diagram.png"></center>
 
-Figure 3: Block diagram of sleep and wake up mode software algorithm.
+Figure 4: Block diagram of sleep and wake up mode software algorithm.
 
 **5.2 TinyML model preparation for inferencing**
-- 26 data group of accelerometer (3 axes data) will be used to determine if the person are stationary, walking or running.
-- Preparing [dataset.zip](/ai_model/dataset.zip) for the senario above and train model with Google Colab to produce [model.h](/ai_model/model.h5) file.
-- Utilizing X-CUBE-AI expansion package (part of STM32Cube.AI ecosystem). It extends STM32CubeMX capabilities with automatic conversion and optimization of pretrained artificial intelligence algorithms, including neural network and classical machine learning models.
+- 26 data group (3 axes data each) of accelerometer are used to determine if the person are stationary, walking or running.
+- Collected [dataset.zip](/ai_model/dataset.zip) for the senario above and trained model with Google Colab to produce [model.h](/ai_model/model.h5) file.
+- Utilized X-CUBE-AI expansion package (part of STM32Cube.AI ecosystem). It extends STM32CubeMX capabilities with automatic conversion and optimization of pretrained artificial intelligence algorithms, including neural network and classical machine learning models.
 - X-CUBE-AI supports models trained with TensorFlow, Keras, PyTorch, Caffe and others. The model file needs to be in Keras (.h5), TensorFlow Lite (.tflite), or ONNX (.onnx) format.
 
 <center><img src="/pictures/3_Software_TinyML_Block_Diagram.png"></center>
 
-Figure 4: Block diagram of TinyML software algorithm.
+Figure 5: Block diagram of TinyML software algorithm.
 
 **5.3 ThingSpeak**
 - Cloud platform to store and monitor all the collected data (heart rate and oximeter sensor, output of AI model and emergency button state).
+
+**5.4 Power consumption during normal and low power (STOP) mode**
+- Power consumption when in normal mode = (3.3V)(112.8mA) = 372.24mW
+- Power consumption when in low power (STOP) mode = (3.3V)(56.6mA) = 186.78mW
+- Power consumption is reduced almost 50% in low power (STOP) mode
+
+<center><img src="/pictures/7_PowerConsumption_NormalMode.jpg"></center>
+
+Figure 6: Current flow when in normal mode.
+
+<center><img src="/pictures/6_PowerConsumption_STOPMode.jpg"></center>
+
+Figure 7: Current flow when in low power (STOP) mode.
 
 ### 6.0 Results
 
@@ -160,11 +177,13 @@ Figure 4: Block diagram of TinyML software algorithm.
 | :-------: | :------: | :------: |
 | STM32F407VET6 Development Board | 1 | 70 |
 | ST-Link V2 USB | 1 | 20 |
-| 3-Axis Accelerometer | 1 | 10 |
-| Oximeter and Heart Rate Sensor | 1 | 10 |
+| GPU6050 3-Axis Accelerometer | 1 | 10 |
+| MAX 30102 Oximeter and Heart Rate Sensor | 1 | 10 |
 | Push Button | 1 | 1 | 
 | ESP8266 WiFi Serial Transceiver Module | 1 | 10 |
-|  |  Total Cost (RM) | 121 |
+| 18650 Lithium Battery Shield | 1 | 16 |
+| 18650 Lithium Battery | 1 | 20 |
+|  |  Total Cost (RM) | 157 |
 
 </center>
 
@@ -186,7 +205,10 @@ Figure 4: Block diagram of TinyML software algorithm.
 [https://community.st.com/s/article/how-to-configure-the-rtc-to-wake-up-the-stm32-periodically-from-low-power-modes](https://community.st.com/s/article/how-to-configure-the-rtc-to-wake-up-the-stm32-periodically-from-low-power-modes)\
 [7] COVID-19 Inpatient Deaths and Brought-in-Dead Cases in Malaysia:\
 [https://www.researchgate.net/publication/361819420_COVID-19_Inpatient_Deaths_and_Brought-in-Dead_Cases_in_Malaysia](https://www.researchgate.net/publication/361819420_COVID-19_Inpatient_Deaths_and_Brought-in-Dead_Cases_in_Malaysia)\
-[8] Previous Research Paper:\
+[8] Code library reference:\
+[https://github.com/lamik/MAX30102_STM32_HAL/tree/master/Src/MAX30102](https://github.com/lamik/MAX30102_STM32_HAL/tree/master/Src/MAX30102)\
+[https://controllerstech.com/data-logger-using-stm32-and-esp8266/](https://controllerstech.com/data-logger-using-stm32-and-esp8266/)\
+[9] Previous Research Paper:\
 [Design of rescue and health monitoring bracelet for the elderly based on STM32](https://ieeexplore.ieee.org/document/8785440)\
 [Design of Health Assistant Bracelet for the Elderly Based on STM32](https://ieeexplore.ieee.org/document/8997765)\
 [Research and design of elderly health monitoring and anti-fall positioning alarm device based on STM32](https://ieeexplore.ieee.org/document/9513059)
