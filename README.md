@@ -4,7 +4,7 @@
 **Owners:** Veknes Benjaman; Saw Jun Chao
 
 **Source Code:** [main.c](/ProjectLife/Core/Src/main.c)\
-**Video Demonstration:** [https://youtu.be/w17b4KmCgAw](https://youtu.be/w17b4KmCgAw)
+**Video Demonstration:** [https://youtu.be/MIEMPDX8EPY](https://youtu.be/MIEMPDX8EPY)
 
 ### 1.0 Introduction
 Monitoring elderly people at home is an important way to ensure their well-being and safety, and to support their independence and quality of life.
